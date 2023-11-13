@@ -4,7 +4,7 @@
   "description": "Criando servidor com banco de dados SQLite e usando ORM com Sequelize",
   "main": "api/index.js",
   "engines": {
-    "node": "14.x"
+    "node": "18.x"
   },
   "scripts": {
     "start": "node api/index.js",
