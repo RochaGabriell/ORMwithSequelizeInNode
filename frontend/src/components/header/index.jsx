@@ -4,7 +4,7 @@ import styled from 'styled-components'
 const WrapperContainer = styled.div`
   display: flex;
   height: 4rem;
-  background-color: white;
+  background-color: #333;
   align-items: center;
   justify-content: space-around;
 `
@@ -18,7 +18,7 @@ const StyledLink = styled(Link)`
   align-items: center;
   justify-content: center;
   text-decoration: none;
-  color: black;
+  color: white;
   font-weight: bold;
   font-size: 1.5rem;
   &:hover {

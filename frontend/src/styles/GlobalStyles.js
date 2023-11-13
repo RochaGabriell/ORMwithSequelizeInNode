@@ -10,6 +10,10 @@ const GlobalStyles = createGlobalStyle`
   body, #root {
     height: 100vh;
     background-color: #f5f4f1;
+
+    @media screen and (max-width: 768px) {
+      height: 100%;
+    }
   }
 
   *, button, input {

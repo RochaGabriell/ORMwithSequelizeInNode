@@ -4,10 +4,10 @@ import Header from '../../components/header'
 
 const WrapperContainer = styled.div`
   display: flex;
-  height: 100%;
   flex-direction: column;
-  background-color: green;
+  background-color: #eee;
   color: black;
+  height: 100%;
 `
 
 const Base = () => {
