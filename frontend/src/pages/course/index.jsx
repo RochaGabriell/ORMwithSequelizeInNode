@@ -1,7 +1,8 @@
 import { useState, useEffect } from 'react'
-import axios from 'axios'
+import { useCookies } from 'react-cookie'
 
 import Modal from '../../components/Modal'
+import * as AuthService from '../../services/AuthService'
 
 import {
   WrapperContainer,
@@ -15,7 +16,7 @@ import {
 } from './styles'
 
 const Course = () => {
-  const apiURL = 'http://localhost:3000'
+  const [cookies] = useCookies(['jwt'])
   const [data, setData] = useState([])
   const [error, setError] = useState(null)
   const [dataSelected, setDataSelected] = useState(null)
@@ -30,7 +31,11 @@ const Course = () => {
 
   const getData = async () => {
     try {
-      const response = await axios.get(`${apiURL}/cursos`)
+      const response = await AuthService.api.get(`/cursos`, {
+        headers: {
+          Authorization: `Bearer ${cookies.jwt}`
+        }
+      })
       setData(response.data)
       setError(null)
     } catch (error) {
@@ -45,9 +50,17 @@ const Course = () => {
       }
 
       if (dataSelected) {
-        await axios.put(`${apiURL}/cursos/${dataSelected.id}`, data)
+        await AuthService.api.put(`/cursos/${dataSelected.id}`, data, {
+          headers: {
+            Authorization: `Bearer ${cookies.jwt}`
+          }
+        })
       } else {
-        await axios.post(`${apiURL}/cursos`, data)
+        await AuthService.api.post(`/cursos`, data, {
+          headers: {
+            Authorization: `Bearer ${cookies.jwt}`
+          }
+        })
       }
 
       dataSelected(null)
@@ -64,7 +77,11 @@ const Course = () => {
 
   const updateCourse = async id => {
     try {
-      const response = await axios.get(`${apiURL}/cursos/${id}`)
+      const response = await AuthService.api.get(`/cursos/${id}`, {
+        headers: {
+          Authorization: `Bearer ${cookies.jwt}`
+        }
+      })
       setDataSelected(response.data)
       setModalData({
         id: response.data.id,
@@ -77,7 +94,11 @@ const Course = () => {
 
   const deleteCourse = async id => {
     try {
-      await axios.delete(`${apiURL}/cursos/${id}`)
+      await AuthService.api.delete(`/cursos/${id}`, {
+        headers: {
+          Authorization: `Bearer ${cookies.jwt}`
+        }
+      })
       getData()
     } catch (error) {
       setError(error)

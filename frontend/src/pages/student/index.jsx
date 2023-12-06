@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react'
-import axios from 'axios'
+import { useCookies } from 'react-cookie'
 
+import * as AuthService from '../../services/AuthService'
 import Modal from '../../components/Modal'
 
 import {
@@ -16,7 +17,7 @@ import {
 } from '../../pages/course/styles'
 
 const Student = () => {
-  const apiURL = 'http://localhost:3000'
+  const [cookies] = useCookies(['jwt'])
   const [data, setData] = useState([])
   const [error, setError] = useState(null)
   const [dataCourse, setDataCourse] = useState([])
@@ -34,8 +35,17 @@ const Student = () => {
 
   const getData = async () => {
     try {
-      const response = await axios.get(`${apiURL}/alunos`)
-      const responseCourse = await axios.get(`${apiURL}/cursos`)
+      const response = await AuthService.api.get(`/alunos`, {
+        headers: {
+          Authorization: `Bearer ${cookies.jwt}`
+        }
+      })
+      const responseCourse = await AuthService.api.get(`/cursos`, {
+        headers: {
+          Authorization: `Bearer ${cookies.jwt}`
+        }
+      })
+
       setData(response.data)
       setDataCourse(responseCourse.data)
       setError(null)
@@ -58,9 +68,17 @@ const Student = () => {
       }
 
       if (dataSelected) {
-        await axios.put(`${apiURL}/alunos/${dataSelected.id}`, data)
+        await AuthService.api.put(`/alunos/${dataSelected.id}`, data, {
+          headers: {
+            Authorization: `Bearer ${cookies.jwt}`
+          }
+        })
       } else {
-        await axios.post(`${apiURL}/alunos`, data)
+        await AuthService.api.post(`/alunos`, data, {
+          headers: {
+            Authorization: `Bearer ${cookies.jwt}`
+          }
+        })
       }
 
       dataSelected(null)
@@ -79,7 +97,12 @@ const Student = () => {
 
   const updateStudent = async id => {
     try {
-      const response = await axios.get(`${apiURL}/alunos/${id}`)
+      const response = await AuthService.api.get(`/alunos/${id}`, {
+        headers: {
+          Authorization: `Bearer ${cookies.jwt}`
+        }
+      })
+
       setDataSelected(response.data)
       setModalData({
         id: response.data.id,
@@ -94,7 +117,12 @@ const Student = () => {
 
   const deleteStudent = async id => {
     try {
-      await axios.delete(`${apiURL}/alunos/${id}`)
+      await AuthService.api.delete(`/alunos/${id}`, {
+        headers: {
+          Authorization: `Bearer ${cookies.jwt}`
+        }
+      })
+
       getData()
     } catch (error) {
       error(error)
